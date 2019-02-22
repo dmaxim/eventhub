@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EventHubPublisher.Managers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Mx.EventHub.Sender;
 
 namespace EventHubPublisher
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+
+		public Startup(IHostingEnvironment env)
 		{
-			Configuration = configuration;
+			var builder = new ConfigurationBuilder()
+				.SetBasePath(env.ContentRootPath)
+				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+				.AddEnvironmentVariables();
+			Configuration = builder.Build();
 		}
 
 		public IConfiguration Configuration { get; }
@@ -31,6 +33,12 @@ namespace EventHubPublisher
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
+
+
+			services.AddSingleton<EventHubConfiguration>(context => GetEventHubConfiguration());
+
+			services.AddTransient<IEventHubMessageSender, EventHubMessageSender>();
+			services.AddTransient<IEventHubManager, EventHubManager>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
@@ -58,6 +66,14 @@ namespace EventHubPublisher
 					name: "default",
 					template: "{controller=Home}/{action=Index}/{id?}");
 			});
+		}
+
+
+		public EventHubConfiguration GetEventHubConfiguration()
+		{
+			return new EventHubConfiguration(
+				Configuration["EventHub:ConnectionString"],
+				Configuration["EventHub:HubName"]);
 		}
 	}
 }

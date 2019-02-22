@@ -1,0 +1,12 @@
+﻿
+using System.Threading.Tasks;
+using Mx.EventHub.Sender.Models;
+
+namespace EventHubPublisher.Managers
+{
+	public interface IEventHubManager
+	{
+
+		Task SendEventAsync(EventMessageModel messageModel);
+	}
+}
