@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
 using Mx.EventHub.Sender.Models;
@@ -23,7 +24,32 @@ namespace Mx.EventHub.Sender
 
 		public async Task SendAsync(IEnumerable<EventMessageModel> messages)
 		{
-			await _eventHubClient.SendAsync(messages.ToEventData()).ConfigureAwait(false);
+			var eventDataBatch = _eventHubClient.CreateBatch();
+			var eventData = messages.ToEventData();
+
+			foreach (var data in eventData)
+			{
+				if(!eventDataBatch.TryAdd(data))
+				{
+					await SendBatchAsync(eventDataBatch);
+					eventDataBatch = _eventHubClient.CreateBatch();
+					eventDataBatch.TryAdd(data);
+				}
+			}
+
+			if (eventDataBatch.Count > 0)
+			{
+				await SendBatchAsync(eventDataBatch);
+			}
+			
+		}
+
+		private async Task SendBatchAsync(EventDataBatch batch)
+		{
+			await _eventHubClient.SendAsync(batch).ConfigureAwait(false);
 		}
 	}
+
+
+
 }
