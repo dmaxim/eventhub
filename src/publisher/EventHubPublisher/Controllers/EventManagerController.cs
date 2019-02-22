@@ -50,5 +50,22 @@ namespace EventHubPublisher.Controllers
 
 			return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEventBatch()
+		{
+
+			var eventBatch = new EventMessageModel[]
+			{
+				new EventMessageModel("Batch Event One Created"),
+				new EventMessageModel("Batch Event Two Created"),
+				new EventMessageModel("Batch Event Three Created")
+				,new EventMessageModel("Batch Event Four Created")
+			};
+	        await _eventHubManager.SendEventsAsync(eventBatch)
+		        .ConfigureAwait(false);
+
+	        return RedirectToAction("Index");
+		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mx.EventHub.Sender.Models;
 
@@ -8,5 +8,7 @@ namespace EventHubPublisher.Managers
 	{
 
 		Task SendEventAsync(EventMessageModel messageModel);
+
+		Task SendEventsAsync(IEnumerable<EventMessageModel> messages);
 	}
 }

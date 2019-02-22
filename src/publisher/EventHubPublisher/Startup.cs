@@ -40,7 +40,7 @@ namespace EventHubPublisher
 			services.AddTransient<IEventHubMessageSender, EventHubMessageSender>();
 			services.AddTransient<IEventHubManager, EventHubManager>();
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +72,7 @@ namespace EventHubPublisher
 		public EventHubConfiguration GetEventHubConfiguration()
 		{
 			return new EventHubConfiguration(
-				Configuration["EventHub:ConnectionString"],
+				Configuration["EventHub:SendConnectionString"],
 				Configuration["EventHub:HubName"]);
 		}
 	}
