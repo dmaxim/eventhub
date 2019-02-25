@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
@@ -22,11 +23,20 @@ namespace EventHubListener
 
 			var connectionString = configuration["EventHub:ListenConnectionString"];
 
+			//await ReceiveFromSinglePartition(connectionString).ConfigureAwait(false);
+
+			await ReceiveFromAll(connectionString).ConfigureAwait(false);
+
+		}
+
+
+		private static async Task ReceiveFromSinglePartition(string connectionString)
+		{
 			Console.WriteLine("Connecting to the Event Hub...");
 			var eventHubClient = EventHubClient.CreateFromConnectionString(connectionString);
 
-
-			var partitionReceiver = eventHubClient.CreateReceiver("$Default", "0", EventPosition.FromStart());
+			//var partitionReceiver = eventHubClient.CreateReceiver("$Default", "0", EventPosition.FromStart());
+			var partitionReceiver = eventHubClient.CreateReceiver("$Default", "0", EventPosition.FromEnqueuedTime(DateTime.Now));
 
 			Console.WriteLine("Waiting for incoming events ....");
 			while (true)
@@ -42,9 +52,34 @@ namespace EventHubListener
 					}
 				}
 			}
-
 		}
 
-	
+		private static async Task ReceiveFromAll(string connectionString)
+		{
+			Console.WriteLine("Connecting to the Event Hub...");
+			var eventHubClient = EventHubClient.CreateFromConnectionString(connectionString);
+
+			var runtimeInformation = await eventHubClient.GetRuntimeInformationAsync().ConfigureAwait(false);
+
+			//var partitionReceivers = runtimeInformation.PartitionIds.Select(partitionId =>
+			//		eventHubClient.CreateReceiver("$Default", partitionId,
+			//			EventPosition.FromStart())).ToList();
+
+			var partitionReceivers = runtimeInformation.PartitionIds.Select(partitionId =>
+				eventHubClient.CreateReceiver("$Default", partitionId,
+					EventPosition.FromEnqueuedTime(DateTime.Now))).ToList();
+
+			Console.WriteLine("Waiting for incoming events ....");
+
+			foreach (var partitionReceiver in partitionReceivers)
+			{
+				partitionReceiver.SetReceiveHandler(
+					new TestEventHubPartitionReceiveHandler(partitionReceiver.PartitionId, 10));
+			}
+
+			Console.WriteLine("Press any key to shutdown");
+			Console.ReadLine();
+			await eventHubClient.CloseAsync();
+		}
 	}
 }
