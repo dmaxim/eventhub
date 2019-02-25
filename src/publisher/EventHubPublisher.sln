@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHubPublisher", "EventH
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.EventHub.Sender", "..\Mx.EventHub.Sender\Mx.EventHub.Sender.csproj", "{7F894FB5-F337-44DB-AD58-2F155C1EF2BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHubListener", "EventHubListener\EventHubListener.csproj", "{E7FDA5CB-A53E-4758-865A-511C1433B67B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHubListener", "EventHubListener\EventHubListener.csproj", "{E7FDA5CB-A53E-4758-865A-511C1433B67B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mx.EventHub.Model", "Mx.EventHub.Model\Mx.EventHub.Model.csproj", "{03BB77F8-76FD-432E-943A-13202E6BEAEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{E7FDA5CB-A53E-4758-865A-511C1433B67B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7FDA5CB-A53E-4758-865A-511C1433B67B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7FDA5CB-A53E-4758-865A-511C1433B67B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03BB77F8-76FD-432E-943A-13202E6BEAEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03BB77F8-76FD-432E-943A-13202E6BEAEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03BB77F8-76FD-432E-943A-13202E6BEAEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03BB77F8-76FD-432E-943A-13202E6BEAEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

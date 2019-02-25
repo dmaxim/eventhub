@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
+using Mx.EventHub.Model;
+using Newtonsoft.Json;
 
 namespace EventHubListener
 {
@@ -23,7 +25,8 @@ namespace EventHubListener
 				foreach (var eventData in events)
 				{
 					var receivedMessage = Encoding.UTF8.GetString(eventData.Body.Array);
-					Console.WriteLine($"{receivedMessage} : PartitionId: {_partitionId}");
+					var eventMessage = JsonConvert.DeserializeObject<EventMessageModel>(receivedMessage);
+					Console.WriteLine($"{eventMessage.DisplayFormat} : PartitionId: {_partitionId}");
 				}
 			}
 			return Task.CompletedTask;

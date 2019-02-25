@@ -1,9 +1,7 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Azure.EventHubs;
+using Mx.EventHub.Model;
 using Mx.EventHub.Sender.Models;
 
 namespace Mx.EventHub.Sender

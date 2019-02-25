@@ -1,7 +1,6 @@
 ﻿using System;
 
-
-namespace Mx.EventHub.Sender.Models
+namespace Mx.EventHub.Model
 {
 	public class EventMessageModel
 	{
@@ -20,5 +19,8 @@ namespace Mx.EventHub.Sender.Models
 		public Guid CorrelationId { get; set; }
 
 		public DateTime EventTime { get; set; }
+
+
+		public string DisplayFormat => $"EventId: {EventId} | EventTime: {EventTime:HH:mm:ss} | CorrelationId: {CorrelationId} | Message: {Message}";
 	}
 }

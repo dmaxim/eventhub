@@ -2,7 +2,7 @@
 using EventHubPublisher.Managers;
 using EventHubPublisher.Models;
 using Microsoft.AspNetCore.Mvc;
-using Mx.EventHub.Sender.Models;
+using Mx.EventHub.Model;
 
 namespace EventHubPublisher.Controllers
 {
@@ -30,7 +30,7 @@ namespace EventHubPublisher.Controllers
         [HttpPost]
         public IActionResult Create(NewEventModel newEventModel)
         {
-	        return RedirectToAction("Index");
+	        return RedirectToAction("Create");
         }
 
         [HttpPost]
@@ -39,7 +39,7 @@ namespace EventHubPublisher.Controllers
 	        await _eventHubManager.SendEventAsync(new EventMessageModel("Event Type One Created"))
 		        .ConfigureAwait(false);
 			
-	        return RedirectToAction("Index");
+	        return RedirectToAction("Create");
 		}
 
         [HttpPost]
@@ -48,7 +48,7 @@ namespace EventHubPublisher.Controllers
 	        await _eventHubManager.SendEventAsync(new EventMessageModel("Event Type Two Created"))
 		        .ConfigureAwait(false);
 
-			return RedirectToAction("Index");
+			return RedirectToAction("Create");
         }
 
         [HttpPost]
@@ -65,7 +65,7 @@ namespace EventHubPublisher.Controllers
 	        await _eventHubManager.SendEventsAsync(eventBatch)
 		        .ConfigureAwait(false);
 
-	        return RedirectToAction("Index");
+	        return RedirectToAction("Create");
 		}
 	}
 }

@@ -2,8 +2,8 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Mx.EventHub.Model;
 using Mx.EventHub.Sender;
-using Mx.EventHub.Sender.Models;
 
 namespace EventHubPublisher.Managers
 {

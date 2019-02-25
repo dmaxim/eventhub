@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Mx.EventHub.Sender\Mx.EventHub.Sender.csproj" />
+    <ProjectReference Include="..\Mx.EventHub.Model\Mx.EventHub.Model.csproj" />
   </ItemGroup>
 
 </Project>

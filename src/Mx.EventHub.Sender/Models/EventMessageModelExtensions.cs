@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using Microsoft.Azure.EventHubs;
+using Mx.EventHub.Model;
 using Newtonsoft.Json;
 
 namespace Mx.EventHub.Sender.Models
@@ -11,12 +12,12 @@ namespace Mx.EventHub.Sender.Models
 
 		public static IEnumerable<EventData> ToEventData(this IEnumerable<EventMessageModel> messages)
 		{
-			return (messages.Select(message => new EventData(message.ToBytes()))).ToList();
+			return (messages.Select(message => new EventData(ToBytes((EventMessageModel) message)))).ToList();
 		}
 
 		public static byte[] ToBytes(this EventMessageModel messageModel)
 		{
-			return JsonConvert.SerializeObject(messageModel).ToBytes();
+			return ToBytes((string) JsonConvert.SerializeObject(messageModel));
 		}
 
 
