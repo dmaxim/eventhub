@@ -10,6 +10,8 @@ namespace Mx.EventHub.Sender
 	{
 		
 		private readonly EventHubClient _eventHubClient;
+		private const string PartitionKey = "coounters";
+
 		public EventHubMessageSender(EventHubConfiguration configuration)
 		{
 			_eventHubClient = EventHubClient.CreateFromConnectionString(configuration.ConnectionString);
@@ -17,7 +19,9 @@ namespace Mx.EventHub.Sender
 
 		public async Task SendAsync(EventMessageModel message)
 		{
-			await _eventHubClient.SendAsync(new EventData(message.ToBytes())).ConfigureAwait(false);
+			var eventData = new EventData(message.ToBytes());
+			//await _eventHubClient.SendAsync(eventData, PartitionKey).ConfigureAwait(false);  // Partition key send events to a single partition only use when need ordered events
+			await _eventHubClient.SendAsync(eventData).ConfigureAwait(false);
 		}
 
 		public async Task SendAsync(IEnumerable<EventMessageModel> messages)
