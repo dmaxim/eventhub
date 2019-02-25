@@ -66,7 +66,7 @@ namespace EventHubListener
 			//			EventPosition.FromStart())).ToList();
 
 			var partitionReceivers = runtimeInformation.PartitionIds.Select(partitionId =>
-				eventHubClient.CreateReceiver("$Default", partitionId,
+				eventHubClient.CreateReceiver("event_handler_console_direct", partitionId,
 					EventPosition.FromEnqueuedTime(DateTime.Now))).ToList();
 
 			Console.WriteLine("Waiting for incoming events ....");

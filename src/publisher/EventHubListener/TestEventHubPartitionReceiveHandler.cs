@@ -26,7 +26,7 @@ namespace EventHubListener
 				{
 					var receivedMessage = Encoding.UTF8.GetString(eventData.Body.Array);
 					var eventMessage = JsonConvert.DeserializeObject<EventMessageModel>(receivedMessage);
-					Console.WriteLine($"{eventMessage.DisplayFormat} : PartitionId: {_partitionId}");
+					Console.WriteLine($"{eventMessage.DisplayFormat} : PartitionId: {_partitionId} | OffSet: {eventData.SystemProperties.Offset}");
 				}
 			}
 			return Task.CompletedTask;
