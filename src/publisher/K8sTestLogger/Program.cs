@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Enrichers.UsafStandard;
 
 namespace K8sTestLogger
 {
@@ -25,6 +27,7 @@ namespace K8sTestLogger
 			//		Log.Logger =
 			//			new LoggerConfiguration()
 			//				.ReadFrom.Configuration(hostContext.Configuration)
+			//				.Enrich.WithStandardUsafEnrichment("Usaf.TestLogger", Environment.MachineName)
 			//				.CreateLogger();
 			//		loggingBuilder.AddSerilog();
 			//	})
@@ -47,14 +50,17 @@ namespace K8sTestLogger
 				.ReadFrom.Configuration(config)
 				.CreateLogger();
 
-			logger.Warning("Test Application Starting");
+
+			var logDetail = new LogDetail("Test User", "Test action", "First log entry");
+
+			logger.Warning("Test Application Starting {@logDetail}", logDetail);
 
 
-			for (var i = 0; i < 10; i++)
+			for (var i = 0; i < 1000; i++)
 			{
 				Thread.Sleep(1000);
-
-				logger.Warning($"Logging from the K8s logger a message with counter {i}");
+				logDetail.Message = $"Logging with index {i}";
+				logger.Warning($"Logging from the K8s logger a message with counter {i} " + " {@logDetail} ", logDetail);
 			}
 
 			Thread.Sleep(5000);

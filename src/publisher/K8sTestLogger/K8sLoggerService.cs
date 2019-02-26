@@ -15,14 +15,15 @@ namespace K8sTestLogger
 
 		public Task StartAsync(CancellationToken cancellationToken)
 		{
-			_logger.LogWarning("Test Application Starting");
+			var logDetail = new LogDetail("Test User", "Test action", "First log entry");
+			_logger.LogWarning("Test Application Starting {@logDetail} ", logDetail);
 
 
-			for (var i = 0; i < 10; i++)
+			for (var i = 0; i < 1000; i++)
 			{
 				Thread.Sleep(1000);
-
-				_logger.LogWarning($"Logging from the K8s logger a message with counter {i}");
+				logDetail.Message = $"Logging with index {i}";
+				_logger.LogWarning($"Logging from the K8s logger a message with counter {i} {@logDetail}", logDetail);
 			}
 
 			return Task.CompletedTask;
