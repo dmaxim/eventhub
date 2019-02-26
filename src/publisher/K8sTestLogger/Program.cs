@@ -1,62 +1,65 @@
-﻿using System;
-using System.IO;
-using System.Runtime.InteropServices.ComTypes;
-using System.Threading;
-using Microsoft.AspNetCore.Razor.Language;
+﻿using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging.Configuration;
 using Serilog;
 
 namespace K8sTestLogger
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 
+			var hostBuilder = new HostBuilder()
+				.ConfigureHostConfiguration(hostConfig => { hostConfig.SetBasePath(Directory.GetCurrentDirectory()); })
+				.ConfigureAppConfiguration((hostingContext, appConfig) =>
+				{
+					appConfig.AddJsonFile("appsettings.json", false).AddEnvironmentVariables();
+				})
+				.ConfigureLogging((hostContext, loggingBuilder) =>
+				{
+					
+					Log.Logger =
+						new LoggerConfiguration()
+							.ReadFrom.Configuration(hostContext.Configuration)
+							.CreateLogger();
+					loggingBuilder.AddSerilog();
+				})
+				.ConfigureServices((hostContext, collection) =>
+					{
+						collection.AddSingleton<IHostedService, K8sLoggerService>();
+						
+					}).UseConsoleLifetime();
 
-			var builder = new ConfigurationBuilder()
-				.SetBasePath(Directory.GetCurrentDirectory())
-				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-				.AddEnvironmentVariables();
+			await hostBuilder.RunConsoleAsync();
 
-			var config = builder.Build();
+			//var builder = new ConfigurationBuilder()
+			//	.SetBasePath(Directory.GetCurrentDirectory())
+			//	.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+			//	.AddEnvironmentVariables();
 
-			var logger = new LoggerConfiguration()
-				.ReadFrom.Configuration(config)
-				.CreateLogger();
+			//var config = builder.Build();
 
-			logger.Warning("Test Application Starting");
+			//var logger = new LoggerConfiguration()
+			//	.ReadFrom.Configuration(config)
+			//	.CreateLogger();
+
+			//logger.Warning("Test Application Starting");
 
 
-			for (var i = 0; i < 10; i++)
-			{
-				Thread.Sleep(1000);
+			//for (var i = 0; i < 10; i++)
+			//{
+			//	Thread.Sleep(1000);
 
-				logger.Warning($"Logging from the K8s logger a message with counter {i}");
-			}
+			//	logger.Warning($"Logging from the K8s logger a message with counter {i}");
+			//}
 
-			Thread.Sleep(5000);
+			//Thread.Sleep(5000);
 		}
 
 
-		private static void StartUp()
-		{
-			var builder = new HostBuilder()
-				.ConfigureAppConfiguration((hostingContext, config) =>
-					{
-						config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-						config.AddEnvironmentVariables();
-					})
-				.ConfigureLogging((hostingContext, logging) =>
-					{
-						logging.AddConfiguration();
-						logging.AddSerilog();
-					}
-				);
-
-
-		}
+		
 	}
 }
