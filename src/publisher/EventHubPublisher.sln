@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.EventHub.Sender", "..\Mx
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHubListener", "EventHubListener\EventHubListener.csproj", "{E7FDA5CB-A53E-4758-865A-511C1433B67B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mx.EventHub.Model", "Mx.EventHub.Model\Mx.EventHub.Model.csproj", "{03BB77F8-76FD-432E-943A-13202E6BEAEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mx.EventHub.Model", "Mx.EventHub.Model\Mx.EventHub.Model.csproj", "{03BB77F8-76FD-432E-943A-13202E6BEAEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHub.Listener.Processor", "EventHub.Listener.Processor\EventHub.Listener.Processor.csproj", "{9A09208C-87B7-4329-B95A-C9DE1B235B3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHub.Listener.Processor", "EventHub.Listener.Processor\EventHub.Listener.Processor.csproj", "{9A09208C-87B7-4329-B95A-C9DE1B235B3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K8sTestLogger", "K8sTestLogger\K8sTestLogger.csproj", "{0B95B2BF-E3AF-4EB6-8A3E-6692FBDB18AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{9A09208C-87B7-4329-B95A-C9DE1B235B3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A09208C-87B7-4329-B95A-C9DE1B235B3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A09208C-87B7-4329-B95A-C9DE1B235B3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B95B2BF-E3AF-4EB6-8A3E-6692FBDB18AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B95B2BF-E3AF-4EB6-8A3E-6692FBDB18AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B95B2BF-E3AF-4EB6-8A3E-6692FBDB18AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B95B2BF-E3AF-4EB6-8A3E-6692FBDB18AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
