@@ -4,7 +4,7 @@ using EventHubPublisher.Models;
 
 namespace EventHubPublisher.Controllers
 {
-	public class HomeController : Controller
+    public class HomeController : Controller
 	{
 		public IActionResult Index()
 		{

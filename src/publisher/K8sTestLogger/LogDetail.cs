@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 
 namespace K8sTestLogger
 {
@@ -21,6 +22,8 @@ namespace K8sTestLogger
 		public string Action { get; set; }
 
 		public string Message { get; set; }
+
+        public Dictionary<string, object> AdditionalInformation { get; set; }
 
 		
 
