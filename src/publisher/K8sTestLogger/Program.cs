@@ -1,17 +1,16 @@
 ﻿using System;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-using Collector.Serilog.Sinks.AzureEventHub;
 using Microsoft.Azure.EventHubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Core;
-using Serilog.Enrichers.UsafStandard;
 using Serilog.Formatting.Compact;
 using Serilog.Formatting.Elasticsearch;
+using Serilog.Formatting.Json;
+using Serilog.Sinks.AzureEventHub;
+
 
 namespace K8sTestLogger
 {
@@ -33,7 +32,7 @@ namespace K8sTestLogger
                     Log.Logger =
                         new LoggerConfiguration()
                             .ReadFrom.Configuration(hostContext.Configuration)
-                            .WriteTo.Sink(new AzureEventHubBatchingSink(eventHubClient: eventHubClient, period: TimeSpan.FromSeconds(15)))
+                            .WriteTo.Sink(new AzureEventHubSink(eventHubClient: eventHubClient, new JsonFormatter()))
                             .CreateLogger();
                     loggingBuilder.AddSerilog();
 
