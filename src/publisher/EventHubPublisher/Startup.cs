@@ -71,9 +71,14 @@ namespace EventHubPublisher
 
 		public EventHubConfiguration GetEventHubConfiguration()
 		{
-			return new EventHubConfiguration(
-				Configuration["EventHub:SendConnectionString"],
-				Configuration["EventHub:HubName"]);
-		}
-	}
+            //return new EventHubConfiguration(
+            //	Configuration["EventHub:SendConnectionString"],
+            //	Configuration["EventHub:HubName"]);
+
+            return new EventHubConfiguration(
+            	Configuration["LoggingEventHub:ConnectionString"],
+            	Configuration["LoggingEventHub:HubName"]);
+
+        }
+    }
 }

@@ -10,7 +10,7 @@ namespace Mx.EventHub.Sender
 	{
 		
 		private readonly EventHubClient _eventHubClient;
-		private const string PartitionKey = "coounters";
+		private const string PartitionKey = "counters";
 
 		public EventHubMessageSender(EventHubConfiguration configuration)
 		{
