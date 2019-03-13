@@ -2,11 +2,15 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Collector.Serilog.Sinks.AzureEventHub;
+using Microsoft.Azure.EventHubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Core;
 using Serilog.Enrichers.UsafStandard;
+using Serilog.Formatting.Compact;
 
 namespace K8sTestLogger
 {
@@ -23,10 +27,11 @@ namespace K8sTestLogger
                 })
                 .ConfigureLogging((hostContext, loggingBuilder) =>
                 {
-
+                    var eventHubClient = GetEventHubClient(hostContext.Configuration);
                     Log.Logger =
                         new LoggerConfiguration()
                             .ReadFrom.Configuration(hostContext.Configuration)
+                            .WriteTo.Sink(new AzureEventHubBatchingSink(eventHubClient: eventHubClient, period: TimeSpan.FromSeconds(15), new CompactJsonFormatter()))
                             .CreateLogger();
                     loggingBuilder.AddSerilog();
                 })
@@ -41,6 +46,9 @@ namespace K8sTestLogger
                 }).UseConsoleLifetime();
 
             await hostBuilder.RunConsoleAsync();
+
+
+            Log.CloseAndFlush();
 
             //         var builder = new ConfigurationBuilder()
             //	.SetBasePath(Directory.GetCurrentDirectory())
@@ -78,6 +86,15 @@ namespace K8sTestLogger
 
             return logConfiguration;
 
+        }
+
+        private static EventHubClient GetEventHubClient(IConfiguration configuration)
+        {
+            var eventHubConfiguration = new LoggingEventHubConfiguration();
+            configuration.GetSection("LoggingEventHub").Bind(eventHubConfiguration);
+
+            return EventHubClient.CreateFromConnectionString(eventHubConfiguration.ConnectionString);
+            
         }
 
 
