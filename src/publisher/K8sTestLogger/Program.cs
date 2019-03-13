@@ -27,12 +27,12 @@ namespace K8sTestLogger
                 })
                 .ConfigureLogging((hostContext, loggingBuilder) =>
                 {
-                    var eventHubClient = GetEventHubClient(hostContext.Configuration);
-                    
+                    //var eventHubClient = GetEventHubClient(hostContext.Configuration);
+                    //var test = new JsonFormatter();
                     Log.Logger =
                         new LoggerConfiguration()
                             .ReadFrom.Configuration(hostContext.Configuration)
-                            .WriteTo.Sink(new AzureEventHubSink(eventHubClient: eventHubClient, new JsonFormatter()))
+                          //   .WriteTo.Sink(new AzureEventHubSink(eventHubClient: eventHubClient, new JsonFormatter()))
                             .CreateLogger();
                     loggingBuilder.AddSerilog();
 
