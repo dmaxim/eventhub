@@ -11,6 +11,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Enrichers.UsafStandard;
 using Serilog.Formatting.Compact;
+using Serilog.Formatting.Elasticsearch;
 
 namespace K8sTestLogger
 {
@@ -28,12 +29,15 @@ namespace K8sTestLogger
                 .ConfigureLogging((hostContext, loggingBuilder) =>
                 {
                     var eventHubClient = GetEventHubClient(hostContext.Configuration);
+                    
                     Log.Logger =
                         new LoggerConfiguration()
                             .ReadFrom.Configuration(hostContext.Configuration)
-                            .WriteTo.Sink(new AzureEventHubBatchingSink(eventHubClient: eventHubClient, period: TimeSpan.FromSeconds(15), new CompactJsonFormatter()))
+                            .WriteTo.Sink(new AzureEventHubBatchingSink(eventHubClient: eventHubClient, period: TimeSpan.FromSeconds(15)))
                             .CreateLogger();
                     loggingBuilder.AddSerilog();
+
+                    Serilog.Debugging.SelfLog.Enable(msg => System.Diagnostics.Trace.WriteLine(msg));
                 })
                 .ConfigureServices((hostContext, collection) =>
                 {
@@ -93,8 +97,10 @@ namespace K8sTestLogger
             var eventHubConfiguration = new LoggingEventHubConfiguration();
             configuration.GetSection("LoggingEventHub").Bind(eventHubConfiguration);
 
-            return EventHubClient.CreateFromConnectionString(eventHubConfiguration.ConnectionString);
-            
+            var client =  EventHubClient.CreateFromConnectionString(eventHubConfiguration.ConnectionString);
+
+            return client;
+
         }
 
 

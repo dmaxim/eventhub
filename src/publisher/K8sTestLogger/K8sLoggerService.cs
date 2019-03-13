@@ -26,7 +26,7 @@ namespace K8sTestLogger
             {
                 Thread.Sleep(_logConfiguration.Delay);
                 logDetail.Message = $"Logging with index {i}";
-                _logger.LogInformation($"Logging from the K8s logger a message with counter {i} {@logDetail}", logDetail);
+                _logger.LogInformation($"Logging from the K8s logger a message with counter {i} " + " {@logDetail}", logDetail);
                 LogMessage(logDetail, i);
             }
 
@@ -43,12 +43,12 @@ namespace K8sTestLogger
         {
             if (logCount % 20 == 0)
             {
-                _logger.LogWarning($"Logging from the K8s logger a message with counter {logCount} {@logDetail}", logDetail);
+                _logger.LogWarning($"Logging from the K8s logger a message with counter {logCount} " + " {@logDetail} ", logDetail);
             }
 
             if (logCount % 200 == 0)
             {
-                _logger.LogError($"Logging from the K8s logger a message with counter {logCount} {@logDetail}", logDetail);
+                _logger.LogError($"Logging from the K8s logger a message with counter {logCount} " + " {@logDetail} ", logDetail);
             }
         }
     }
