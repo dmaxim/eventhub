@@ -9,12 +9,12 @@ namespace K8sTestLogger
 {
     public class K8sLogger
     {
-        private readonly ILogger<K8sLoggerService> _logger;
+        private readonly ILogger<K8sLogger> _logger;
         private readonly LogConfiguration _logConfiguration;
         private const string LogPropertyName = "logDetail";
         private const string WeirdPropertyName = "account.something";
 
-        public K8sLogger(ILogger<K8sLoggerService> logger, LogConfiguration logConfiguration)
+        public K8sLogger(ILogger<K8sLogger> logger, LogConfiguration logConfiguration)
         {
             _logger = logger;
             _logConfiguration = logConfiguration;

@@ -5,27 +5,27 @@ using Microsoft.Extensions.Logging;
 
 namespace K8sTestLogger
 {
-    public class K8sLoggerService : IHostedService
-    {
+    //public class K8sLoggerService : IHostedService
+    //{
 
-        private readonly K8sLogger _k8sLogger;
+    //    private readonly K8sLogger _k8sLogger;
 
-        public K8sLoggerService(ILogger<K8sLoggerService> logger, LogConfiguration logConfiguration)
-        {
-            _k8sLogger = new K8sLogger(logger, logConfiguration);
-        }
+    //    public K8sLoggerService(ILogger<K8sLoggerService> logger, LogConfiguration logConfiguration)
+    //    {
+    //        _k8sLogger = new K8sLogger(logger, logConfiguration);
+    //    }
 
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            _k8sLogger.GenerateLogEntries();
-            return Task.CompletedTask;
-        }
+    //    public Task StartAsync(CancellationToken cancellationToken)
+    //    {
+    //        _k8sLogger.GenerateLogEntries();
+    //        return Task.CompletedTask;
+    //    }
 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
+    //    public Task StopAsync(CancellationToken cancellationToken)
+    //    {
+    //        return Task.CompletedTask;
+    //    }
 
 
-    }
+    //}
 }

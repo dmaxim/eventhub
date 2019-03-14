@@ -4,6 +4,7 @@ using Microsoft.Azure.EventHubs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 
 
@@ -11,69 +12,66 @@ namespace K8sTestLogger
 {
 	public class Program
 	{
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
 
-            var hostBuilder = new HostBuilder()
-                .ConfigureHostConfiguration(hostConfig => { hostConfig.SetBasePath(Directory.GetCurrentDirectory()); })
-                .ConfigureAppConfiguration((hostingContext, appConfig) =>
-                {
-                    appConfig.AddJsonFile("appsettings.json", false)
-                        .AddJsonFile("environment/appsettings.json", true)
-                        .AddEnvironmentVariables();
-                })
-                .ConfigureLogging((hostContext, loggingBuilder) =>
-                {
-                    //var eventHubClient = GetEventHubClient(hostContext.Configuration);
-                    //var test = new JsonFormatter();
-                    Log.Logger =
-                        new LoggerConfiguration()
-                            .ReadFrom.Configuration(hostContext.Configuration)
-                          //   .WriteTo.Sink(new AzureEventHubSink(eventHubClient: eventHubClient, new JsonFormatter()))
-                            .CreateLogger();
-                    loggingBuilder.AddSerilog();
-                    
-                })
-                .ConfigureServices((hostContext, collection) =>
-                {
-                    var logConfiguration = GetConfiguration(hostContext.Configuration);
+            //var hostBuilder = new HostBuilder()
+            //    .ConfigureHostConfiguration(hostConfig => { hostConfig.SetBasePath(Directory.GetCurrentDirectory()); })
+            //    .ConfigureAppConfiguration((hostingContext, appConfig) =>
+            //    {
+            //        appConfig.AddJsonFile("appsettings.json", false)
+            //            .AddJsonFile("environment/appsettings.json", true)
+            //            .AddEnvironmentVariables();
+            //    })
+            //    .ConfigureLogging((hostContext, loggingBuilder) =>
+            //    {
+            //        //var eventHubClient = GetEventHubClient(hostContext.Configuration);
+            //        //var test = new JsonFormatter();
+            //        Log.Logger =
+            //            new LoggerConfiguration()
+            //                .ReadFrom.Configuration(hostContext.Configuration)
+            //              //   .WriteTo.Sink(new AzureEventHubSink(eventHubClient: eventHubClient, new JsonFormatter()))
+            //                .CreateLogger();
+            //        loggingBuilder.AddSerilog();
 
-                    collection.AddSingleton<LogConfiguration>((context) => logConfiguration);
+            //    })
+            //    .ConfigureServices((hostContext, collection) =>
+            //    {
+            //        var logConfiguration = GetConfiguration(hostContext.Configuration);
 
-                    collection.AddSingleton<IHostedService, K8sLoggerService>();
+            //        collection.AddSingleton<LogConfiguration>((context) => logConfiguration);
 
-                }).UseConsoleLifetime();
+            //        collection.AddSingleton<IHostedService, K8sLoggerService>();
 
-            await hostBuilder.RunConsoleAsync();
+            //    }).UseConsoleLifetime();
 
-
-            Log.CloseAndFlush();
-
-            //         var builder = new ConfigurationBuilder()
-            //	.SetBasePath(Directory.GetCurrentDirectory())
-            //	.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            //	.AddEnvironmentVariables();
-
-            //var config = builder.Build();
-
-            //var logger = new LoggerConfiguration()
-            //	.ReadFrom.Configuration(config)
-            //	.CreateLogger();
+            //await hostBuilder.RunConsoleAsync();
 
 
-            //var logDetail = new LogDetail("Test User", "Test action", "First log entry");
+            //Log.CloseAndFlush();
 
-            //logger.Warning("Test Application Starting {@logDetail}", logDetail);
+            var configBuilder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("environment/appsettings.json", true)
+                .AddEnvironmentVariables();
 
+            var config = configBuilder.Build();
 
-            //for (var i = 0; i < 1000; i++)
-            //{
-            //	Thread.Sleep(1000);
-            //	logDetail.Message = $"Logging with index {i}";
-            //	logger.Warning($"Logging from the K8s logger a message with counter {i} " + " {@logDetail} ", logDetail);
-            //}
+           Log.Logger =
+                new LoggerConfiguration()
+                    .ReadFrom.Configuration(config)
+                .CreateLogger();
 
-            //Thread.Sleep(5000);
+            var services = new ServiceCollection();
+
+            services.AddLogging(builder => builder.AddSerilog());
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var k8sLogger = new K8sLogger(serviceProvider.GetService<ILogger<K8sLogger>>(), GetConfiguration(config));
+
+            k8sLogger.GenerateLogEntries();
         }
 
 
