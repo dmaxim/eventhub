@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: k8s-logger-console
-        image: devusafregistry.azurecr.io/k8slogger:v4
+        image: devusafregistry.azurecr.io/k8slogger:v11
         volumeMounts:
         - name: k8slogger-config
           mountPath: /app/environment

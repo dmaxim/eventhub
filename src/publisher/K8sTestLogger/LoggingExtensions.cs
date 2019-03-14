@@ -29,7 +29,7 @@ namespace K8sTestLogger
 
         public static void LogErrorMessage(this ILogger logger, Exception ex, string message, string propertyName, object state)
         {
-            WithDestructuredScope(logger, propertyName, state, messageLogger => messageLogger.LogInformation(ex, message));
+            WithDestructuredScope(logger, propertyName, state, messageLogger => messageLogger.LogError(ex, message));
 
             
         }

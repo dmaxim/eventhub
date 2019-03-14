@@ -12,7 +12,7 @@ namespace K8sTestLogger
         private readonly ILogger<K8sLogger> _logger;
         private readonly LogConfiguration _logConfiguration;
         private const string LogPropertyName = "logDetail";
-        private const string WeirdPropertyName = "account.something";
+        private const string WeirdPropertyName = "account.accountId";
 
         public K8sLogger(ILogger<K8sLogger> logger, LogConfiguration logConfiguration)
         {
@@ -45,25 +45,33 @@ namespace K8sTestLogger
             if (logCount % 20 == 0)
             {
                 _logger.LogWarningMessage($"Logging from the K8s logger a message with counter {logCount} ", LogPropertyName, logDetail);
+                LogAdditionalDetailWithWeirdProperty(logCount);
             }
 
-            if (logCount % 200 == 0)
+            if (logCount % 50 == 0)
             {
+                LogAdditionalDetailWithWeirdDictionary(logCount);
                 LogException(logDetail, logCount);
                 LogAdditionalInformation(logCount);
-                LogAdditionalDetailWithWeirdProperty(logCount);
+                
             }
 
         }
 
         private void LogAdditionalDetailWithWeirdProperty(int logCount)
         {
-            var additionalDetail = new LogDetail("Test User", "Detail Logging", "***************Logging Detail With Property**************");
+      
+            _logger.LogInformation("***Logging Account Id Account Id: {account.accountId}", 1111 );
+        }
+
+        private void LogAdditionalDetailWithWeirdDictionary(int logCount)
+        {
+            var additionalDetail = new LogDetail("Test User", "Detail Logging", "***************Logging Detail With Dictionary Dot**************");
 
             additionalDetail.AdditionalInformation = new Dictionary<string, object>
             {
                 {
-                    "Envelope",
+                    "Envelope.My",
                     new Envelope
                     {
                         EnvelopeId = 122, CreateDate = DateTime.Now, CreatedBy = "Test Account",
@@ -73,7 +81,7 @@ namespace K8sTestLogger
                 {"Form", new Form {FormId = 334, FormName = "Test Form", FormType = "Some Type"}}
             };
 
-            _logger.LogWarningMessage($"Logging from the K8s logger a message with counter {logCount} ", WeirdPropertyName,
+            _logger.LogWarningMessage($"Logging from the K8s logger a message with counter {logCount} ", LogPropertyName,
                 additionalDetail);
         }
 
