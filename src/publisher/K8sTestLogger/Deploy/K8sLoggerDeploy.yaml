@@ -1,0 +1,28 @@
+﻿apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: k8s-logger
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: k8s-logger
+    spec:
+      containers:
+      - name: k8s-logger-console
+        image: devusafregistry.azurecr.io/k8slogger:v4
+        volumeMounts:
+        - name: k8slogger-config
+          mountPath: /app/environment
+          readOnly: true
+      volumes:
+      - name: k8slogger-config
+        secret:
+          secretName: k8s-logger-config

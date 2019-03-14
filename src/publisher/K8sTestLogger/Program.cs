@@ -23,7 +23,9 @@ namespace K8sTestLogger
                 .ConfigureHostConfiguration(hostConfig => { hostConfig.SetBasePath(Directory.GetCurrentDirectory()); })
                 .ConfigureAppConfiguration((hostingContext, appConfig) =>
                 {
-                    appConfig.AddJsonFile("appsettings.json", false).AddEnvironmentVariables();
+                    appConfig.AddJsonFile("appsettings.json", false)
+                        .AddJsonFile("environment/appsettings.json", true)
+                        .AddEnvironmentVariables();
                 })
                 .ConfigureLogging((hostContext, loggingBuilder) =>
                 {
