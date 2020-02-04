@@ -1,2 +1,2 @@
 # eventhub
-Projects for evaluating azuer event hub
+Projects for evaluating Azure Event Hub
